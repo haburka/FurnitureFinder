@@ -19,6 +19,7 @@ public class FavoriteTab extends Fragment
 {
        private List<Item> items;
        private RecyclerView rv;
+       private Context context;
 
         public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState)
         {
@@ -26,7 +27,7 @@ public class FavoriteTab extends Fragment
 
             rv=(RecyclerView)view.findViewById(R.id.rv);
 
-            Context context=container.getContext();
+            context=container.getContext();
             final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
             rv.setLayoutManager(layoutManager);
 
@@ -39,19 +40,19 @@ public class FavoriteTab extends Fragment
         private void initializeData()
         {
             items = new ArrayList<>();
-            items.add(new Item("Chair", "Test", R.drawable.stock_chair));
-            items.add(new Item("Sofa", "Test", R.drawable.stock_couch));
-            items.add(new Item("Desk", "Test", R.drawable.stock_desk));
-            items.add(new Item("Chair", "Test", R.drawable.stock_chair));
-            items.add(new Item("Sofa", "Test", R.drawable.stock_couch));
-            items.add(new Item("Desk", "Test", R.drawable.stock_desk));
 
+            items.add(new Item("Chair", "Test", R.drawable.stock_chair));
+            items.add(new Item("Sofa", "Test", R.drawable.stock_couch));
+            items.add(new Item("Desk", "Test", R.drawable.stock_desk));
+            items.add(new Item("Chair", "Test", R.drawable.stock_chair));
+            items.add(new Item("Sofa", "Test", R.drawable.stock_couch));
+            items.add(new Item("Desk", "Test", R.drawable.stock_desk));
 
         }
 
          private void initializeAdapter()
         {
-             MyAdapter adapter = new MyAdapter(items);
+             MyAdapter adapter = new MyAdapter(context,items);
              rv.setAdapter(adapter);
         }
 

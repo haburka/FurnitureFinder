@@ -10,4 +10,6 @@
     <string name="bt_remove">Remove</string>
     <string name="bt_title">Edit Title</string>
     <string name="bt_back">Back</string>
+    <string name="bt_yes">Yes</string>
+    <string name="bt_no">No</string>
 </resources>
