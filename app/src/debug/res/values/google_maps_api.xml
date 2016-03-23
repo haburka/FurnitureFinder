@@ -1,0 +1,19 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=7E:50:89:B6:4B:F5:D7:58:7A:E0:AA:4E:B9:1F:0C:3A:31:C5:D1:5F%3Bcom.robb.furniturefinder
+
+    You can also add your credentials to an existing key, using this line:
+    7E:50:89:B6:4B:F5:D7:58:7A:E0:AA:4E:B9:1F:0C:3A:31:C5:D1:5F;com.robb.furniturefinder
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBS9V5SvWfwCV6SZ_W_h4kEyottW0ez8k4</string>
+</resources>

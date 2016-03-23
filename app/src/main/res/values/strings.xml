@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">FurnitureFinder</string>
+    <string name="title">FurnitureFinder</string>
+    <string name="title_activity_maps">BlankMap</string>
+    <string name="title_activity_map_fragment">MapFragment</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_manage_single_item">ManageSingleItem</string>
+</resources>

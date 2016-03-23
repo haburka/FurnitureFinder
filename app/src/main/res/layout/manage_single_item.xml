@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        android:id="@+id/title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"
+        android:textSize="40sp"
+        android:textColor="#000000" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/photo"
+        android:layout_below="@+id/title"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/stock_chair" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:id="@+id/text"
+        android:layout_below="@+id/title"
+        android:layout_toRightOf="@+id/photo"
+        android:layout_alignBottom="@+id/photo"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="20dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="string bt_photo"
+        android:id="@+id/button_photo"
+        android:layout_marginTop="56dp"
+        android:layout_below="@+id/photo"
+        android:layout_alignRight="@+id/photo"
+        android:layout_alignEnd="@+id/photo"
+        android:onClick="changeImage"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="string bt_text"
+        android:id="@+id/button_text"
+        android:layout_alignTop="@+id/button_photo"
+        android:layout_toRightOf="@+id/title" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="string bt_title"
+        android:id="@+id/button_title"
+        android:layout_marginTop="41dp"
+        android:layout_below="@+id/button_photo"
+        android:layout_alignLeft="@+id/button_photo"
+        android:layout_alignStart="@+id/button_photo"
+        android:layout_alignRight="@+id/button_photo"
+        android:layout_alignEnd="@+id/button_photo" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="string bt_remove"
+        android:id="@+id/button_remove"
+        android:layout_alignTop="@+id/button_title"
+        android:layout_alignLeft="@+id/button_text"
+        android:layout_alignStart="@+id/button_text"
+        android:onClick="remove"
+        android:layout_alignRight="@+id/button_text"
+        android:layout_alignEnd="@+id/button_text" />
+
+</RelativeLayout>
