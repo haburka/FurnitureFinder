@@ -1,5 +1,6 @@
 package com.robb.furniturefinder;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,22 +29,27 @@ import java.io.IOException;
 /**
  * Created by BobXu on 3/22/16.
  */
-public class ManageSingleItem extends Fragment {
+public class ManageSingleItem extends Activity {
 
     TextView title;
     TextView text;
     ImageView photo;
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.manage_single_item, container, false);
-        title = (TextView) view.findViewById(R.id.title);
-        text = (TextView) view.findViewById(R.id.text);
-        photo = (ImageView) view.findViewById(R.id.image);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.manage_single_item);
+        title = (TextView) this.findViewById(R.id.title);
+        text = (TextView) this.findViewById(R.id.text);
+        photo = (ImageView) this.findViewById(R.id.image);
 
-        Button bt_remove = (Button) view.findViewById(R.id.button_remove);
-        Button bt_photo = (Button) view.findViewById(R.id.button_photo);
-        Button bt_text = (Button) view.findViewById(R.id.button_text);
-        Button bt_title = (Button) view.findViewById(R.id.button_title);
+        Intent intent = getIntent();
+        title.setText(intent.getCharSequenceExtra("name"));
+
+        Button bt_remove = (Button) this.findViewById(R.id.button_remove);
+        Button bt_photo = (Button) this.findViewById(R.id.button_photo);
+        Button bt_text = (Button) this.findViewById(R.id.button_text);
+        Button bt_title = (Button) this.findViewById(R.id.button_title);
+        Button bt_back = (Button) this.findViewById(R.id.button_back);
 
         bt_photo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,23 +63,27 @@ public class ManageSingleItem extends Fragment {
                 removeDialog();
             }
         });
-
         bt_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editTitle();
             }
         });
-
         bt_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editText();
             }
         });
+        bt_back.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ManageSingleItem.this, MainActivity.class);
+                startActivity(intent);
+            }
+        }));
 
 
-        return view;
     }
 
     int REQUEST_CAMERA;
@@ -82,7 +92,7 @@ public class ManageSingleItem extends Fragment {
 
     private void editPhoto() {
         final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Edit Photo");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -90,11 +100,11 @@ public class ManageSingleItem extends Fragment {
                 if (items[item].equals("Take Photo")) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, REQUEST_CAMERA);
-                } else if (items[item].equals("Choose from Library")) {
+                }
+                else if (items[item].equals("Choose from Gallery")) {
                     Intent intent = new Intent(
                             Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setType("image/*");
                     startActivityForResult(
                             Intent.createChooser(intent, "Select File"),
                             SELECT_FILE);
@@ -128,10 +138,11 @@ public class ManageSingleItem extends Fragment {
                     e.printStackTrace();
                 }
                 photo.setImageBitmap(thumbnail);
-            } else if (requestCode == SELECT_FILE) {
+            }
+            else if (requestCode == SELECT_FILE) {
                 Uri selectedImage = data.getData();
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                Cursor cursor = getContext().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
                 cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 String picturePath = cursor.getString(columnIndex);
@@ -142,7 +153,7 @@ public class ManageSingleItem extends Fragment {
     }
 
     protected void removeDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Remove");
         builder.setMessage("Are you sure you want to remove current listing?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -161,9 +172,9 @@ public class ManageSingleItem extends Fragment {
     }
 
     protected void editTitle() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please enter a new title");
-        final EditText inputTitle = new EditText(getActivity());
+        final EditText inputTitle = new EditText(this);
         builder.setView(inputTitle);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -182,15 +193,15 @@ public class ManageSingleItem extends Fragment {
     }
 
     protected void editText() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please enter new text for description");
-        final EditText inputText = new EditText(getActivity());
+        final EditText inputText = new EditText(this);
         builder.setView(inputText);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                title.setText(inputText.getText());
+                text.setText(inputText.getText());
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

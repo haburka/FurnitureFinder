@@ -23,6 +23,6 @@ public class MainActivity extends AppCompatActivity {
                 FavoriteTab.class, null);
         mTabHost.addTab(
                 mTabHost.newTabSpec("tab3").setIndicator("Manage Listings", null),
-                ManageSingleItem.class, null);
+                ManageTab.class, null);
     }
 }
