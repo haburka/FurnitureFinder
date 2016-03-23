@@ -1,15 +1,20 @@
 package com.robb.furniturefinder;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -59,6 +64,8 @@ public class MapFragment extends Fragment implements
         double latitude = 40.4385187;
         double longitude = -79.9622782;
 
+        googleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(inflater));
+
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
         googleMap.setOnMapClickListener(this);
@@ -96,8 +103,6 @@ public class MapFragment extends Fragment implements
             buttonLayout = new LinearLayout(getActivity());
             buttonLayout.addView(newListing);
             mapLayout.addView(buttonLayout);
-            //bring up a view that lets them see a picture
-            //add to favorites or manage
         }
     }
 
@@ -112,6 +117,62 @@ public class MapFragment extends Fragment implements
         buttonLayout.addView(viewListing);
         mapLayout.addView(buttonLayout);
         return false;
+    }
+
+    class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
+
+        // These a both viewgroups containing an ImageView with id "badge" and two TextViews with id
+        // "title" and "snippet".
+        private final View mWindow;
+
+        private final View mContents;
+
+        CustomInfoWindowAdapter(LayoutInflater inflater) {
+            mWindow = inflater.inflate(R.layout.custom_info_window, null);
+            mContents = inflater.inflate(R.layout.custom_info_contents, null);
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            render(marker, mWindow);
+            return mWindow;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            render(marker, mContents);
+            return mContents;
+        }
+
+        private void render(Marker marker, View view) {
+            int badge;
+            // Use the equals() method on a Marker to check for equals.  Do not use ==.
+            badge = R.drawable.stock_chair;
+
+            ((ImageView) view.findViewById(R.id.badge)).setImageResource(badge);
+
+            String title = marker.getTitle();
+            TextView titleUi = ((TextView) view.findViewById(R.id.title));
+            if (title != null) {
+                // Spannable string allows us to edit the formatting of the text.
+                SpannableString titleText = new SpannableString(title);
+                titleText.setSpan(new ForegroundColorSpan(Color.RED), 0, titleText.length(), 0);
+                titleUi.setText(titleText);
+            } else {
+                titleUi.setText("");
+            }
+
+            String snippet = marker.getSnippet();
+            TextView snippetUi = ((TextView) view.findViewById(R.id.snippet));
+            if (snippet != null && snippet.length() > 12) {
+                SpannableString snippetText = new SpannableString(snippet);
+                snippetText.setSpan(new ForegroundColorSpan(Color.MAGENTA), 0, 10, 0);
+                snippetText.setSpan(new ForegroundColorSpan(Color.BLUE), 12, snippet.length(), 0);
+                snippetUi.setText(snippetText);
+            } else {
+                snippetUi.setText("");
+            }
+        }
     }
 
     @Override
@@ -144,3 +205,4 @@ public class MapFragment extends Fragment implements
         mMapView.onLowMemory();
     }
 }
+
