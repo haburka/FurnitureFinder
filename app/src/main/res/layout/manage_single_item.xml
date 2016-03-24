@@ -18,25 +18,24 @@
         android:textColor="#000000" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/photo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/image"
         android:layout_below="@+id/title"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:src="@drawable/stock_chair" />
+        android:src="@drawable/no_photo" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description"
+        android:text="@string/description"
         android:id="@+id/text"
-        android:layout_below="@+id/title"
-        android:layout_toRightOf="@+id/photo"
-        android:layout_alignBottom="@+id/photo"
-        android:layout_alignParentRight="true"
+        android:textSize="20sp"
+        android:layout_alignTop="@+id/image"
+        android:layout_alignBottom="@+id/image"
         android:layout_alignParentEnd="true"
-        android:textSize="20dp" />
+        android:layout_toRightOf="@+id/image"/>
 
     <Button
         android:layout_width="120dp"
@@ -45,7 +44,8 @@
         android:id="@+id/button_photo"
         android:onClick="changeImage"
         android:layout_marginLeft="50dp"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="60dp"
+        android:layout_below="@+id/image"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -53,36 +53,26 @@
         android:layout_height="wrap_content"
         android:text="@string/bt_text"
         android:id="@+id/button_text"
-        android:layout_above="@+id/button_remove"
-        android:layout_alignEnd="@+id/text"
-        android:layout_marginRight="50dp" />
+        android:layout_marginRight="50dp"
+        android:layout_alignTop="@+id/button_photo"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:text="@string/bt_title"
         android:id="@+id/button_title"
-        android:layout_alignTop="@+id/button_remove"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="50dp" />
-
-    <Button
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:text="@string/bt_remove"
-        android:id="@+id/button_remove"
-        android:onClick="remove"
-        android:layout_marginTop="50dp"
-        android:layout_below="@+id/button_photo"
-        android:layout_alignStart="@+id/button_text" />
+        android:layout_marginLeft="50dp"
+        android:layout_alignTop="@+id/button_back"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:text="@string/bt_back"
         android:id="@+id/button_back"
-        android:layout_below="@+id/button_title"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="60dp"
+        android:layout_below="@+id/button_text"
+        android:layout_alignStart="@+id/button_text" />
 
 </RelativeLayout>

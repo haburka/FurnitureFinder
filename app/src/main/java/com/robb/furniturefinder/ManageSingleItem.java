@@ -1,30 +1,24 @@
 package com.robb.furniturefinder;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * Created by BobXu on 3/22/16.
@@ -34,33 +28,34 @@ public class ManageSingleItem extends Activity {
     TextView title;
     TextView text;
     ImageView photo;
-
+    Intent backIntent;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_single_item);
+        final Intent intent = getIntent();
         title = (TextView) this.findViewById(R.id.title);
         text = (TextView) this.findViewById(R.id.text);
         photo = (ImageView) this.findViewById(R.id.image);
 
-        Intent intent = getIntent();
-        title.setText(intent.getCharSequenceExtra("name"));
+        title.setText(intent.getStringExtra("newTitle"));
+        text.setText(intent.getStringExtra("newDesc"));
+        photo.setImageBitmap((Bitmap) intent.getParcelableExtra("newImage"));
 
-        Button bt_remove = (Button) this.findViewById(R.id.button_remove);
         Button bt_photo = (Button) this.findViewById(R.id.button_photo);
         Button bt_text = (Button) this.findViewById(R.id.button_text);
         Button bt_title = (Button) this.findViewById(R.id.button_title);
         Button bt_back = (Button) this.findViewById(R.id.button_back);
 
+        backIntent = new Intent(this, MainActivity.class);
+        backIntent.putExtra("back", 0);
+        backIntent.putExtra("pos", intent.getIntExtra("pos", 0));
+        backIntent.putExtra("newTitle", title.getText().toString());
+        backIntent.putExtra("newDesc", text.getText().toString());
+        backIntent.putExtra("newImage", intent.getParcelableExtra("newImage"));
         bt_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editPhoto();
-            }
-        });
-        bt_remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeDialog();
             }
         });
         bt_title.setOnClickListener(new View.OnClickListener() {
@@ -75,20 +70,44 @@ public class ManageSingleItem extends Activity {
                 editText();
             }
         });
-        bt_back.setOnClickListener((new View.OnClickListener() {
+        bt_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ManageSingleItem.this, MainActivity.class);
-                startActivity(intent);
+                backIntent.putExtra("newTitle", title.getText().toString());
+                backIntent.putExtra("newDesc", text.getText().toString());
+                startActivity(backIntent);
             }
-        }));
-
-
+        });
     }
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
-    int REQUEST_CAMERA;
-    int SELECT_FILE;
-    int RESULT_OK;
+    /**
+     * Checks if the app has permission to write to device storage
+     *
+     * If the app does not has permission then the user will be prompted to grant permissions
+     *
+     * @param activity
+     */
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
+    int REQUEST_CAMERA=1;
+    int SELECT_FILE=2;
 
     private void editPhoto() {
         final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
@@ -102,13 +121,11 @@ public class ManageSingleItem extends Activity {
                     startActivityForResult(intent, REQUEST_CAMERA);
                 }
                 else if (items[item].equals("Choose from Gallery")) {
-                    Intent intent = new Intent(
-                            Intent.ACTION_PICK,
+                    Intent intent = new Intent(Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(
-                            Intent.createChooser(intent, "Select File"),
-                            SELECT_FILE);
-                } else if (items[item].equals("Cancel")) {
+                    startActivityForResult(intent, SELECT_FILE);
+                }
+                else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
             }
@@ -121,54 +138,24 @@ public class ManageSingleItem extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CAMERA) {
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                Bitmap bm = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                File destination = new File(Environment.getExternalStorageDirectory(),
-                        System.currentTimeMillis() + ".jpg");
-                FileOutputStream fo;
-                try {
-                    destination.createNewFile();
-                    fo = new FileOutputStream(destination);
-                    fo.write(bytes.toByteArray());
-                    fo.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                photo.setImageBitmap(thumbnail);
+                bm.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                photo.setImageBitmap(bm);
+                backIntent.putExtra("newImage", bm);
             }
             else if (requestCode == SELECT_FILE) {
                 Uri selectedImage = data.getData();
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
                 cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 String picturePath = cursor.getString(columnIndex);
                 cursor.close();
+
                 photo.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             }
         }
-    }
-
-    protected void removeDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Remove");
-        builder.setMessage("Are you sure you want to remove current listing?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //remove listing
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
     }
 
     protected void editTitle() {
