@@ -79,33 +79,7 @@ public class ManageSingleItem extends Activity {
             }
         });
     }
-    // Storage Permissions
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
 
-    /**
-     * Checks if the app has permission to write to device storage
-     *
-     * If the app does not has permission then the user will be prompted to grant permissions
-     *
-     * @param activity
-     */
-    public static void verifyStoragePermissions(Activity activity) {
-        // Check if we have write permission
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
-        }
-    }
     int REQUEST_CAMERA=1;
     int SELECT_FILE=2;
 
@@ -147,13 +121,14 @@ public class ManageSingleItem extends Activity {
             else if (requestCode == SELECT_FILE) {
                 Uri selectedImage = data.getData();
                 String[] filePathColumn = { MediaStore.Images.Media.DATA };
-                Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
                 cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 String picturePath = cursor.getString(columnIndex);
                 cursor.close();
-
-                photo.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                Bitmap bm = BitmapFactory.decodeFile(picturePath);
+                photo.setImageBitmap(bm);
+                backIntent.putExtra("newImage", bm);
             }
         }
     }
@@ -178,7 +153,6 @@ public class ManageSingleItem extends Activity {
         });
         builder.show();
     }
-
     protected void editText() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please enter new text for description");
@@ -199,6 +173,5 @@ public class ManageSingleItem extends Activity {
         });
         builder.show();
     }
-
 }
 
