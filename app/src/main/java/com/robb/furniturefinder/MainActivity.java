@@ -4,14 +4,28 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
+import android.view.Window;
+import android.support.v7.widget.Toolbar;
+
 public class MainActivity extends AppCompatActivity {
 
     protected FragmentTabHost mTabHost;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
-        mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setContentInsetsAbsolute(0, 0);
+        toolbar.setBackgroundResource(R.drawable.gradient);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+
+
+       mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
 
         mTabHost.addTab(

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FurnitureFinder</string>
+    <string name="app_name">Furniture Finder</string>
     <string name="title">title</string>
     <string name="title_activity_maps">BlankMap</string>
     <string name="title_activity_map_fragment">MapFragment</string>
