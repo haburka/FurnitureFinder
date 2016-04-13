@@ -6,7 +6,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_manage_single_item">ManageSingleItem</string>
     <string name="bt_photo">Edit Photo</string>
-    <string name="bt_text">Edit Text</string>
+    <string name="bt_text">Edit Info</string>
     <string name="bt_remove">Remove</string>
     <string name="bt_title">Edit Title</string>
     <string name="bt_back">Save &amp; Back</string>

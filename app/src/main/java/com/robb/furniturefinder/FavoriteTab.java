@@ -41,12 +41,12 @@ public class FavoriteTab extends Fragment
         {
             items = new ArrayList<>();
 
-            items.add(new Item("Chair", "Test", R.drawable.stock_chair));
-            items.add(new Item("Sofa", "Test", R.drawable.stock_couch));
-            items.add(new Item("Desk", "Test", R.drawable.stock_desk));
-            items.add(new Item("Chair", "Test", R.drawable.stock_chair));
-            items.add(new Item("Sofa", "Test", R.drawable.stock_couch));
-            items.add(new Item("Desk", "Test", R.drawable.stock_desk));
+            items.add(new Item("Chair", "(no description)", R.drawable.stock_chair));
+            items.add(new Item("Sofa", "(no description)", R.drawable.stock_couch));
+            items.add(new Item("Desk", "(no description)", R.drawable.stock_desk));
+            items.add(new Item("Chair", "(no description)", R.drawable.stock_chair));
+            items.add(new Item("Sofa", "(no description)", R.drawable.stock_couch));
+            items.add(new Item("Desk", "(no description)", R.drawable.stock_desk));
 
         }
 
